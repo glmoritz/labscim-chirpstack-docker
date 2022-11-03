@@ -1,6 +1,17 @@
 version: "3"
 
 services:
+  labscim:
+    image: glmoritz/labscim:0.2
+    restart: unless-stopped
+    volumes:
+      - ./sim/:/models/labscim/simulations/wireless/sim/
+    depends_on:
+      - chirpstack 
+    environment:
+      - MQTT_BROKER_HOST=mosquitto
+      - GATEWAY_BRIDGE_HOST=chirpstack-gateway-bridge-eu868
+
   chirpstack:
     image: chirpstack/chirpstack:4.0.2
     command: -c /etc/chirpstack
