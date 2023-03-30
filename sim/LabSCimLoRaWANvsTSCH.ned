@@ -22,15 +22,17 @@
 
 
 package tsch.simulations.wireless.sim;
-//package labscimtest;
+
 import inet.common.geometry.common.SimpleGeographicCoordinateSystem;
-import inet.visualizer.integrated.IntegratedCanvasVisualizer;
+import inet.visualizer.canvas.integrated.IntegratedCanvasVisualizer;
 import inet.networklayer.configurator.ipv4.Ipv4NetworkConfigurator;
-import inet.physicallayer.contract.packetlevel.IRadioMedium;
+import inet.physicallayer.wireless.common.contract.packetlevel.IRadioMedium;
 import inet.visualizer.contract.IIntegratedVisualizer;
 import inet.node.inet.AdhocHost;
 import inet.node.inet.WirelessHost;
 import labscim.physicallayer.LabscimRadioRecorder;
+import inet.environment.common.PhysicalEnvironment;
+
 
 network LabSCimLoRaWANvsTSCH
 {
@@ -41,56 +43,39 @@ network LabSCimLoRaWANvsTSCH
         int SimulationAreaX = default(1000);
         int SimulationAreaY = default(1000);
         
-        @display("bgb=450,450");
+        @display("bgb=450,450");      
         
-        @statistic[LoRaUpstreamPacketGenerated](record=histogram,vector?; interpolationmode=none);
-        @statistic[LoRaUpstreamPacketLatency](record=histogram,vector?; interpolationmode=none);
-        @statistic[LoRaDownstreamPacketLatency](record=histogram,vector?; interpolationmode=none);
-        @statistic[LoRaUpstreamPacketError](record=histogram,vector?; interpolationmode=none);
-        @statistic[LoRaDownstreamPacketGenerated](record=histogram,vector?; interpolationmode=none);
-        @statistic[LoRaNodeJoin](record=histogram,vector?; interpolationmode=none);
-        @statistic[LoRaPacketRTT](record=histogram,vector?; interpolationmode=none);
+        @statistic[UpstreamPacketGenerated](record=histogram,vector?; interpolationmode=none);
+        @statistic[UpstreamPacketLatency](record=histogram,vector?; interpolationmode=none);
+        @statistic[UpstreamPacketHopcount](record=histogram,vector?; interpolationmode=none);
+        @statistic[UpstreamPacketError](record=histogram,vector?; interpolationmode=none);
         
-        @statistic[LoRaUpstreamAoIMax](record=histogram,vector?; interpolationmode=none);
-        @statistic[LoRaUpstreamAoIMin](record=histogram,vector?; interpolationmode=none);        
-        @statistic[LoRaUpstreamAoIArea](record=histogram,vector?; interpolationmode=none);
+        @statistic[DownstreamPacketGenerated](record=histogram,vector?; interpolationmode=none);
+        @statistic[DownstreamPacketLatency](record=histogram,vector?; interpolationmode=none);
+        @statistic[DownstreamPacketHopcount](record=histogram,vector?; interpolationmode=none);
+        @statistic[PacketRTT](record=histogram,vector?; interpolationmode=none);        
         
-        @statistic[LoRaDownstreamAoIMax](record=histogram,vector?; interpolationmode=none);
-        @statistic[LoRaDownstreamAoIMin](record=histogram,vector?; interpolationmode=none);        
-        @statistic[LoRaDownstreamAoIArea](record=histogram,vector?; interpolationmode=none);      
+        @statistic[NodeJoin](record=histogram,vector?; interpolationmode=none);
+        @statistic[NodeLeave](record=histogram,vector?; interpolationmode=none);        
+        @statistic[NodeAssociated](record=histogram,vector?; interpolationmode=none);
+        @statistic[NodeDisassociated](record=histogram,vector?; interpolationmode=none);
         
+        @statistic[UpstreamAoIMax](record=histogram,vector?; interpolationmode=none);
+        @statistic[UpstreamAoIMin](record=histogram,vector?; interpolationmode=none);        
+        @statistic[UpstreamAoIArea](record=histogram,vector?; interpolationmode=none);
         
-        @statistic[TSCHUpstreamPacketGenerated](record=histogram,vector?; interpolationmode=none);
-        @statistic[TSCHUpstreamPacketLatency](record=histogram,vector?; interpolationmode=none);
-        @statistic[TSCHUpstreamPacketHopcount](record=histogram,vector?; interpolationmode=none);
-        @statistic[TSCHUpstreamPacketError](record=histogram,vector?; interpolationmode=none);
-        
-        @statistic[TSCHDownstreamPacketGenerated](record=histogram,vector?; interpolationmode=none);
-        @statistic[TSCHDownstreamPacketLatency](record=histogram,vector?; interpolationmode=none);
-        @statistic[TSCHDownstreamPacketHopcount](record=histogram,vector?; interpolationmode=none);
-        @statistic[TSCHPacketRTT](record=histogram,vector?; interpolationmode=none);        
-        
-        @statistic[TSCHNodeJoin](record=histogram,vector?; interpolationmode=none);
-        @statistic[TSCHNodeLeave](record=histogram,vector?; interpolationmode=none);        
-        @statistic[TSCHNodeAssociated](record=histogram,vector?; interpolationmode=none);
-        @statistic[TSCHNodeDisassociated](record=histogram,vector?; interpolationmode=none);
-        
-        @statistic[TSCHUpstreamAoIMax](record=histogram,vector?; interpolationmode=none);
-        @statistic[TSCHUpstreamAoIMin](record=histogram,vector?; interpolationmode=none);        
-        @statistic[TSCHUpstreamAoIArea](record=histogram,vector?; interpolationmode=none);
-        
-        @statistic[TSCHDownstreamAoIMax](record=histogram,vector?; interpolationmode=none);
-        @statistic[TSCHDownstreamAoIMin](record=histogram,vector?; interpolationmode=none);        
-        @statistic[TSCHDownstreamAoIArea](record=histogram,vector?; interpolationmode=none);
+        @statistic[DownstreamAoIMax](record=histogram,vector?; interpolationmode=none);
+        @statistic[DownstreamAoIMin](record=histogram,vector?; interpolationmode=none);        
+        @statistic[DownstreamAoIArea](record=histogram,vector?; interpolationmode=none);
         
         	
         
     submodules:      
         
-          //visualizer: IntegratedCanvasVisualizer {
-        //    parameters:
-        //        @display("p=100,100");
-        //}        
+        visualizer: <default(firstAvailableOrEmpty("IntegratedCanvasVisualizer"))> like IIntegratedVisualizer if typename != "" {
+            parameters:
+                @display("p=100,300;is=s");
+        }     
           
         coordinateSystem: SimpleGeographicCoordinateSystem {
             parameters:
@@ -117,6 +102,10 @@ network LabSCimLoRaWANvsTSCH
         
         spectrumrecorder: LabscimRadioRecorder {
             @display("r=,,#707070;p=250,200;i=misc/sensor2");            
-        }       
+        }    
+        
+        physicalEnvironment: PhysicalEnvironment {
+            @display("p=40,40");
+        }   
         
 }

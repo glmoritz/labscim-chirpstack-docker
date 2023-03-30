@@ -2,7 +2,7 @@ version: "3"
 
 services:
   labscim:
-    image: glmoritz/labscim:0.2
+    image: glmoritz/labscim:0.3
     restart: unless-stopped
     volumes:
       - ./sim/:/models/labscim/simulations/wireless/sim/
