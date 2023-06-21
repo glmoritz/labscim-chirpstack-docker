@@ -5,7 +5,12 @@ services:
     image: glmoritz/labscim:0.3
     restart: unless-stopped
     volumes:
-      - ./sim/:/models/labscim/simulations/wireless/sim/
+      - ./contiki-ng:/root/contiki-ng
+      - ./LoRaMac-node:/root/LoRaMac-node
+      - ./lora_gateway:/root/lora_gateway
+      - ./packet_forwarder:/root/packet_forwarder      
+      - ./labscim:/models/labscim
+      - ./sim/:/models/labscim/simulations/wireless/sim/      
     depends_on:
       - chirpstack 
     environment:

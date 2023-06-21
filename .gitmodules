@@ -1,3 +1,22 @@
 [submodule "labscim_docker"]
 	path = labscim_docker
 	url = https://github.com/glmoritz/labscim_docker.git
+[submodule "labscim"]
+	path = labscim
+	url = https://github.com/glmoritz/labscim.git
+	branch = lora-fhss
+[submodule "LoRaMac-node"]
+	path = LoRaMac-node
+	url = https://github.com/glmoritz/LoRaMac-node.git
+	branch = lora-fhss
+[submodule "lora_gateway"]
+	path = lora_gateway
+	url = https://github.com/glmoritz/lora_gateway.git
+	branch = lora-fhss
+[submodule "packet_forwarder"]
+	path = packet_forwarder
+	url = https://github.com/glmoritz/packet_forwarder.git
+	branch = lora-fhss
+[submodule "contiki-ng"]
+	path = contiki-ng
+	url = https://github.com/glmoritz/contiki-ng
