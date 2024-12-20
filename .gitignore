@@ -1,6 +1,7 @@
 # hidden files, exluding gitattributes
 .*
 !.gitattributes
+!.gitkeep
 
 # data folder
 /data
