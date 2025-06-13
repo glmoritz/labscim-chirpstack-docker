@@ -193,7 +193,7 @@
     # Please consult the LoRaWAN Regional Parameters and local regulations
     # for valid and legal options. Note that the configured TX Power must be
     # supported by your gateway(s).
-    downlink_tx_power=-1
+    downlink_tx_power=27
 
     # ADR is disabled.
     adr_disabled=false
